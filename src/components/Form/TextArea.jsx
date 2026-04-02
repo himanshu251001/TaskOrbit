@@ -1,11 +1,14 @@
+import { useFormContext } from "react-hook-form";
+
 const TextArea = ({
-    label,
-    name,
+    label = '',
+    name = '',
     placeholder = "",
     rows = 4,
     required = false,
-    defaultValue = "",
 }) => {
+    const { register, formState: { errors } } = useFormContext();
+
     return (
         <div className="form-control w-full">
             {label && (
@@ -16,13 +19,14 @@ const TextArea = ({
             )}
 
             <textarea
-                name={name}
                 placeholder={placeholder}
                 rows={rows}
-                required={required}
-                defaultValue={defaultValue}
-                className="textarea textarea-bordered w-full"
+                {...register(name, { required: required ? `${label} is required` : false })}
+                className={`textarea textarea-bordered w-full ${errors[name] ? "textarea-error" : ""}`}
             />
+            {errors[name] && (
+                <span className="text-error text-sm mt-1">{errors[name].message}</span>
+            )}
         </div>
     );
 };

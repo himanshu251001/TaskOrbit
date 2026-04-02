@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
+import { apiFetch } from "../utils/api";
+import { useEffect } from "react";
 
 export default function Projects() {
   const navigate = useNavigate();
@@ -12,12 +14,22 @@ export default function Projects() {
     { id: 5, name: "Mobile App", status: "Completed" },
     { id: 6, name: "Marketing Campaign", status: "Pending" },
   ];
-
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await apiFetch("/projects");
+        const data = await res.json();
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+    console.log(fetchProjects());
+  }, []);
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-end">
         <button
-          className="btn btn-primary w-full sm:w-auto"
+          className="btn btn-primary btn-md w-full sm:w-auto"
           onClick={() => navigate("/projects/create")}
         >
           <Plus className="mr-2" /> Create Project

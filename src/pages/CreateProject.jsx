@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Input from "../components/Form/Input";
 import DateRange from "../components/Form/DateRange";
 import MultiSelect from "../components/Form/MultiSelect";
@@ -6,19 +5,21 @@ import Range from "../components/Form/Range";
 import FormCard from "../components/Form/FormCard";
 import Actions from "../components/Form/Actions";
 import TextArea from "../components/Form/TextArea";
-
+import { useForm, FormProvider } from "react-hook-form";
 
 export default function CreateProject() {
-    const [formData, setFormData] = useState({
-        projectName: "",
-        client: "",
-        startDate: "",
-        endDate: "",
-        estimatedHours: "",
+    const methods = useForm({
+        defaultValues: {
+            projectName: "",
+            client: "",
+            startDate: "",
+            endDate: "",
+            estimatedHours: "",
+            budget: 0,
+            users: [],
+            description: "",
+        },
     });
-
-    const [budget, setBudget] = useState(0);
-    const [selectedUsers, setSelectedUsers] = useState([]);
 
     const users = [
         "James P.",
@@ -27,33 +28,9 @@ export default function CreateProject() {
         "Daniel Smith",
     ];
 
-    const handleChange = (field, value) => {
-        setFormData((prev) => ({
-            ...prev,
-            [field]: value,
-        }));
+    const onSubmit = (data) => {
+        console.log("Form submitted:", data);
     };
-
-    const toggleUser = (user) => {
-        setSelectedUsers((prev) =>
-            prev.includes(user)
-                ? prev.filter((u) => u !== user)
-                : [...prev, user]
-        );
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const finalData = {
-            ...formData,
-            budget,
-            users: selectedUsers,
-        };
-
-        console.log("Submitted:", finalData);
-    };
-
 
     return (
         <div className="space-y-6">
@@ -62,82 +39,69 @@ export default function CreateProject() {
                 Fill in the details below to create a new project.
             </p>
 
-            <form onSubmit={handleSubmit}>
-                <FormCard>
-                    <Input
-                        label="Project Name"
-                        name="projectName"
-                        value={formData.projectName}
-                        onChange={handleChange}
-                        required={true}
-                    />
-
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <DateRange
-                            title={"Start Date"}
-                            startDate={formData.startDate}
-                            endDate={formData.endDate}
-                            onChange={handleChange}
-                        />
-                        <DateRange
-                            title={"End Date"}
-                            startDate={formData.startDate}
-                            endDate={formData.endDate}
-                            onChange={handleChange}
-                        />
-
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-4">
+            <FormProvider {...methods}>
+                <form onSubmit={methods.handleSubmit(onSubmit)}>
+                    <FormCard>
                         <Input
-                            label="Client Name"
-                            name="client"
-                            value={formData.client}
-                            onChange={handleChange}
+                            label="Project Name"
+                            name="projectName"
                             required={true}
                         />
 
-                        <MultiSelect
-                            label="Users"
-                            options={users}
-                            selected={selectedUsers}
-                            toggleOption={toggleUser}
-                           
-                        />
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <div className="w-full flex flex-col justify-center ">
-                            <Range
-                                label="Budget"
-                                value={budget}
-                                min={0}
-                                max={100000}
-                                step={1000}
-                                onChange={setBudget}
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <DateRange
+                                title="Start Date"
+                                name="startDate"
+                            />
+                            <DateRange
+                                title="End Date"
+                                name="endDate"
                             />
                         </div>
 
-                        <Input
-                            label="Estimated Hours"
-                            name="estimatedHours"
-                            type="number"
-                            value={formData.estimatedHours}
-                            onChange={handleChange}
-                            width="w-1/2"
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <Input
+                                label="Client Name"
+                                name="client"
+                                required={true}
+                            />
+
+                            <MultiSelect
+                                label="Users"
+                                name="users"
+                                options={users}
+                            />
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <div className="w-full flex flex-col justify-center ">
+                                <Range
+                                    label="Budget"
+                                    name="budget"
+                                    min={0}
+                                    max={100000}
+                                    step={1000}
+                                />
+                            </div>
+
+                            <Input
+                                label="Estimated Hours"
+                                name="estimatedHours"
+                                type="number"
+                                required={true}
+                            />
+                        </div>
+                        <TextArea
+                            label="Project Description"
+                            name="description"
+                            placeholder="Enter project details..."
+                            rows={5}
                             required={true}
                         />
-                    </div>
-                    <TextArea
-                        label="Project Description"
-                        name="description"
-                        placeholder="Enter project details..."
-                        rows={5}
-                        required={true}
-                    />
-                    <Actions />
-                </FormCard>
-            </form>
+                        <Actions />
+                    </FormCard>
+                </form>
+            </FormProvider>
         </div>
     );
 }

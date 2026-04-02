@@ -13,9 +13,9 @@ import {
 
 const ProjectHeader = ({ project }) => {
     const statusColors = {
-        "Pending": "bg-red-600 text-gray-100",
-        "In Progress": "badge-warning text-gray-100",
-        "Completed": "bg-green-600 text-gray-100",
+        "Pending": "badge-error text-error-content",
+        "In Progress": "badge-warning text-warning-content",
+        "Completed": "badge-success text-success-content",
     };
 
     return (
@@ -32,13 +32,13 @@ const ProjectHeader = ({ project }) => {
                 </span>
 
                 <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                    <button className="btn btn-sm w-full sm:w-auto justify-center bg-red-600 text-gray-100 hover:bg-red-700">
+                    <button className="btn btn-sm w-full sm:w-auto justify-center btn-error text-error-content">
                         <Trash2 className="w-4 h-4 mr-2" /> Delete
                     </button>
-                    <button className="btn btn-sm w-full sm:w-auto justify-center btn-primary  text-gray-100">
+                    <button className="btn btn-sm w-full sm:w-auto justify-center btn-primary text-primary-content">
                         <Send className="w-4 h-4 mr-2" /> Invite
                     </button>
-                    <button className="btn btn-sm w-full sm:w-auto justify-center btn-info text-gray-100">
+                    <button className="btn btn-sm w-full sm:w-auto justify-center btn-info text-info-content">
                         <Pencil className="w-4 h-4 mr-2" /> Edit
                     </button>
                 </div>

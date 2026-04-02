@@ -1,13 +1,14 @@
+import { useFormContext } from "react-hook-form";
+
 const Input = ({
-  label="",
-  name="",
-  value="",
-  onChange,
+  label = "",
+  name = "",
   type = "text",
-  placeholder="",
- 
+  placeholder = "",
   required = false,
 }) => {
+  const { register, formState: { errors } } = useFormContext();
+
   return (
     <div className={`form-control w-full`}>
       <label className="label">
@@ -20,11 +21,12 @@ const Input = ({
       <input
         type={type}
         placeholder={placeholder}
-        value={value}
-        required={required}
-        onChange={(e) => onChange(name, e.target.value)}
-        className="input input-bordered w-full"
+        {...register(name, { required: required ? `${label} is required` : false })}
+        className={`input input-bordered w-full ${errors[name] ? "input-error" : ""}`}
       />
+      {errors[name] && (
+        <span className="text-error text-sm mt-1">{errors[name].message}</span>
+      )}
     </div>
   );
 }

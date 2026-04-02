@@ -1,10 +1,14 @@
+import { useFormContext } from "react-hook-form";
+
 const MultiSelect = ({
     label,
+    name,
     options,
-    selected,
-    toggleOption,
     required = false,
 }) => {
+    const { register, watch, formState: { errors } } = useFormContext();
+    const selected = watch(name) || [];
+
     return (
         <div className="form-control w-full">
             <label className="label">
@@ -15,7 +19,7 @@ const MultiSelect = ({
             </label>
 
             <div className="dropdown w-full">
-                <label tabIndex={0} className="btn bg-white w-full justify-between">
+                <label tabIndex={0} className="btn bg-base-100 w-full justify-between">
                     <span className="label-text font-semibold">{selected.length > 0
                         ? `${selected.length} selected`
                         : `Select ${label}`}</span>
@@ -27,10 +31,11 @@ const MultiSelect = ({
                             <label className="cursor-pointer flex items-center gap-2">
                                 <input
                                     type="checkbox"
-                                    required={required}
+                                    value={option}
+                                    {...register(name, { 
+                                        validate: (v) => !required || (v && v.length > 0) || `${label} is required` 
+                                    })}
                                     className="checkbox checkbox-sm"
-                                    checked={selected.includes(option)}
-                                    onChange={() => toggleOption(option)}
                                 />
                                 <span>{option}</span>
                             </label>
@@ -38,6 +43,9 @@ const MultiSelect = ({
                     ))}
                 </ul>
             </div>
+            {errors[name] && (
+                <span className="text-error text-sm mt-1">{errors[name].message}</span>
+            )}
         </div>
     );
 }

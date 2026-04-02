@@ -4,8 +4,8 @@ const Actions = () => {
             <button type="button" className="btn btn-ghost w-full sm:w-auto">
                 Cancel
             </button>
-            <button type="submit" className="btn btn-primary w-full sm:w-auto">
-                Create Project
+            <button type="submit" className="btn btn-primary w-full  sm:w-auto">
+                Create 
             </button>
         </div>
     );

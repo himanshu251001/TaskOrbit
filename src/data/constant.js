@@ -119,3 +119,16 @@ export const stack = [
     { name: "Notion", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/notion/notion-original.svg" },
     { name: "Slack", logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg" }
 ];
+
+export const priorityOptions = [
+    { label: "Low", value: "low" },
+    { label: "Medium", value: "medium" },
+    { label: "High", value: "high" },
+    { label: "Highest", value: "highest" },
+];
+export const workTypeOptions = [
+    { label: "Story", value: "story" },
+    { label: "Bug", value: "bug" },
+    { label: "Task", value: "task" },
+    { label: "Epic", value: "epic" },
+];
