@@ -46,7 +46,7 @@ const TaskDetail = () => {
     const location = useLocation();
 
     const [task, setTask] = useState(location.state?.task || null);
-    const [loading, setLoading] = useState(!location.state?.task);
+    const [loading, setLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [saving, setSaving] = useState(false);
     const [options, setOptions] = useState(INITIAL_OPTIONS);

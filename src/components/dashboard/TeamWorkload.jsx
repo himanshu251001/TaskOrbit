@@ -13,10 +13,10 @@ const TeamWorkload = () => {
     setTeamMembers(data);
   }
 
-  useEffect(() => {
+  useEffect(async () => {
     setLoading(true);
     try {
-      getWorkload();
+      await getWorkload();
     } catch (error) {
       console.error(error);
     } finally {
@@ -28,7 +28,7 @@ const TeamWorkload = () => {
     return <div>Loading...</div>;
   }
   return (
-    <div className="card bg-base-100 shadow-sm rounded-2xl w-full overflow-y-auto  max-h-[500px]">
+    <div className="card bg-base-100 shadow-sm rounded-2xl w-full overflow-y-auto max-h-[500px]">
       <div className="card-body p-5 sm:p-6">
         {/* Header */}
         <div className="flex justify-center md:justify-between items-center mb-6">

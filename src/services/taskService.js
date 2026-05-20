@@ -7,7 +7,7 @@ const getTasks = async (options) => {
         throw new Error("Failed to fetch tasks");
     }
     const response = await res.json();
-    return response;
+    return response?.data || response;
 };
 
 const getTaskById = async (id) => {
@@ -16,7 +16,7 @@ const getTaskById = async (id) => {
         throw new Error("Failed to fetch task");
     }
     const response = await res.json();
-    return res?.data;
+    return response?.data || response;
 };
 
 const createTask = async (task) => {
@@ -28,7 +28,7 @@ const createTask = async (task) => {
         throw new Error("Failed to create task");
     }
     const response = await res.json();
-    return response?.data;
+    return response?.data||response;
 };
 
 const updateTask = async (id, task) => {
@@ -51,7 +51,7 @@ const fetchStatusOptions = async () => {
         throw new Error("Failed to fetch statuses");
     }
     return res.json();
-};  
+};
 
 const fetchPriorityOptions = async () => {
     const res = await apiFetch("/tasks/priorities");

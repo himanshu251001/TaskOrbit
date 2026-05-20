@@ -79,11 +79,12 @@ export default function Profile() {
         handleLogout();
 
       }
-
-      const res = await updateUserProfile(user?.id, payload);
-      toast.success("Profile updated successfully");
-      setIsEditing(false);
-      if (refreshUser) refreshUser(); // Refresh global user context
+      else {
+        const res = await updateUserProfile(user?.id, payload);
+        toast.success("Profile updated successfully");
+        setIsEditing(false);
+      }
+      refreshUser(); // Refresh global user context
     } catch (error) {
       toast.error("Failed to update profile");
     }
