@@ -9,7 +9,6 @@ const ProtectedRoute = () => {
         const checkAuth = async () => {
             try {
                 const token = await getValidToken();
-                console.log("token:", token);
                 setAuthState(token ? "authenticated" : "unauthenticated");
             } catch (error) {
                 console.error("Auth check failed:", error);

@@ -90,7 +90,6 @@ const Sidebar = () => (
       <SidebarItem icon={Timer} label="Tasks" />
       <SidebarItem icon={Users} label="Teams" />
       <SidebarItem icon={CalendarDays} label="Calendar" />
-      <SidebarItem icon={Settings} label="Settings" />
     </ul>
 
     <div className="mt-auto flex items-center gap-3 pt-4 p-2 border-t border-base-200">

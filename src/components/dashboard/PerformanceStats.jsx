@@ -1,43 +1,46 @@
-
+import { useEffect, useState } from "react";
+import { fetchStats } from "../../services/taskService";
 import Card from "../common/Card";
 import StatCard from "../common/StatCard";
 
 const PerformanceStats = () => {
+  const [stats, setStats] = useState({});
+  useEffect(() => {
+    const fetchStat = async () => {
+      const data = await fetchStats();
+      setStats(data);
+    };
+    fetchStat();
+  }, []);
+
   return (
     <Card title="Performance Over Time">
-      <div className="flex w-full flex-wrap gap-6 mt-4">
-        <div className="w-full md:flex-1">
+      <div className="flex w-full flex-wrap gap-6 mt-4 ">
+        <div className="w-full md:flex-1 ">
           <StatCard
-            title="Delivered"
-            value="42,642"
-            change="+0.02%"
-            positive
+            title="Total Tickets"
+            value={stats.total}
           />
         </div>
 
         <div className="w-full md:flex-1">
           <StatCard
             title="Opened"
-            value="26,843"
-            change="-0.02%"
+            value={stats.open}
           />
         </div>
 
         <div className="w-full md:flex-1">
           <StatCard
-            title="Clicked"
-            value="525,753"
-            change="+0.02%"
-            positive
+            title="Closed"
+            value={stats.closed}
           />
         </div>
 
         <div className="w-full md:flex-1">
           <StatCard
-            title="Subscribed"
-            value="425"
-            change="+0.02%"
-            positive
+            title="In Progress"
+            value={stats.inProgress}
           />
         </div>
       </div>

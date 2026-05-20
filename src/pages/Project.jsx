@@ -1,29 +1,26 @@
 import { useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react";
-import { apiFetch } from "../utils/api";
-import { useEffect } from "react";
+import { Plus, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getProjects } from "../services/projectsService";
 
 export default function Projects() {
   const navigate = useNavigate();
 
-  const projects = [
-    { id: 1, name: "Website Redesign", status: "In Progress" },
-    { id: 2, name: "Mobile App", status: "Completed" },
-    { id: 3, name: "Marketing Campaign", status: "Pending" },
-    { id: 4, name: "Website Redesign", status: "In Progress" },
-    { id: 5, name: "Mobile App", status: "Completed" },
-    { id: 6, name: "Marketing Campaign", status: "Pending" },
-  ];
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchProjects = async () => {
+      setLoading(true);
       try {
-        const res = await apiFetch("/projects");
-        const data = await res.json();
-      } catch (error) {
-        console.error("Error fetching projects:", error);
+        const data = await getProjects();
+        setProjects(data);
+      } catch (err) {
+        console.error("Error fetching projects:", err);
+      } finally {
+        setLoading(false);
       }
     };
-    console.log(fetchProjects());
+    fetchProjects();
   }, []);
   return (
     <div className="flex flex-col gap-6">
@@ -41,7 +38,7 @@ export default function Projects() {
           <div
             key={project.id}
             className="card w-full sm:w-60 bg-base-100 shadow-xl cursor-pointer hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-            onClick={() => navigate(`/projects/${project.id}`)}
+            onClick={() => navigate(`/projects/${project.id}`, { state: { project } })}
           >
             <div className="card-body">
               <h2 className="card-title">{project.name}</h2>

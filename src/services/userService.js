@@ -52,5 +52,29 @@ const handleLogout = async () => {
     }
     window.location.href = "/";
 }
+const updateUserProfile = async (userId, data) => {
+    const res = await apiFetch(`/users/${userId}`, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+        throw new Error("Failed to update profile");
+    }
+    return res.json();
+}
+const getMembers = async () => {
+    const res = await apiFetch("/users/members");
+    if (!res.ok) {
+        throw new Error("Failed to fetch members");
+    }
+    return res.json();
+};
+const getOrgMembers = async () => {
+    const res = await apiFetch("/users/org-members");
+    if (!res.ok) {
+        throw new Error("Failed to fetch members");
+    }
+    return res.json();
+};  
 
-export { handleImpersonate, handleRevert, handleLogout };
+export { handleImpersonate, handleRevert, handleLogout, getMembers, getOrgMembers, updateUserProfile };

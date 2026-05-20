@@ -43,7 +43,6 @@ const Search = ({
         const res = await apiFetch(`/users/search?value=${encodeURIComponent(searchQuery)}`);
         if (res && res.ok) {
           const response = await res.json();
-          console.log("Search response:", response);
           setSearchResults(response.data || []);
         }
       } catch (error) {

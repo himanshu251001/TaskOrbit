@@ -4,11 +4,16 @@ import Select from "../components/Form/Select";
 import FormCard from "../components/Form/FormCard";
 import Actions from "../components/Form/Actions";
 import TextArea from "../components/Form/TextArea";
-import { priorityOptions } from "../data/constant";
-import { workTypeOptions } from "../data/constant";
 import { useForm, FormProvider } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
+import { createTask, fetchPriorityOptions, fetchStatusOptions, fetchWorkTypeOptions } from "../services/taskService";
+import { Toaster, toast } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { getMembers } from "../services/userService";
 
 export default function CreateTask() {
+    const navigate = useNavigate();
     const methods = useForm({
         defaultValues: {
             title: "",
@@ -16,32 +21,85 @@ export default function CreateTask() {
             description: "",
             workType: "",
             priority: "",
-            assignTo: "",
+            assignToId: "",
+            projectId: "",
         },
     });
+    const [statusOptions, setStatusOptions] = useState([]);
+    const [priorityOptions, setPriorityOptions] = useState([]);
+    const [workTypeOptions, setWorkTypeOptions] = useState([]);
+    const [teamOptions, setTeamOptions] = useState([]);
 
-    const Team = [
-        { label: "Himanshu", value: "himanshu" },
-        { label: "Saurabh", value: "saurabh" },
-        { label: "Krishna", value: "krishna" },
-        { label: "Sai", value: "sai" },
+    // const [projects, setProjects] = useState([]);
+    useEffect(() => {
+        loadStatusOptions();
+        loadPriorityOptions();
+        loadWorkTypeOptions();
+        loadTeamOptions();
+    }, []);
+
+    const loadStatusOptions = async () => {
+        const res = await fetchStatusOptions();
+        setStatusOptions(res);
+    };
+
+    const loadPriorityOptions = async () => {
+        const res = await fetchPriorityOptions();
+        setPriorityOptions(res);
+    };
+
+    const loadWorkTypeOptions = async () => {
+        const res = await fetchWorkTypeOptions();
+        setWorkTypeOptions(res);
+    };
+    const loadTeamOptions = async () => {
+        const res = await getMembers();
+        setTeamOptions(res);
+    };
+    // const fetchProjects = async () => {
+    //     const res = await getProjects();
+    //     setProjects(res);
+    // };
+    const project = [
+        { id: 1, name: "Project 1" },
+        { id: 2, name: "Project 2" },
+        { id: 3, name: "Project 3" },
+        { id: 4, name: "Project 4" },
     ];
 
     const onSubmit = (data) => {
-        console.log("Form submitted:", data);
+        createTask(data).then(() => {
+            toast.success("Task created successfully");
+            navigate("/tasks");
+        }).catch((error) => {
+            toast.error("Failed to create task");
+        });
+
     };
 
     return (
-        <div className="space-y-6">
-            <h1 className="text-3xl font-bold">Create New Task</h1>
-            <p className="text-base-content/70">
-                Fill in the details below to create a new task.
-            </p>
+        <div className="w-full">
+            {/* Breadcrumbs */}
+
+            <nav className="flex items-center gap-2 mb-6 text-sm">
+                <span
+                    className="text-base-content/50 hover:text-primary cursor-pointer transition-colors"
+                    onClick={() => navigate("/tasks")}
+                >
+                    Tasks
+                </span>
+                <ChevronRight size={14} className="text-base-content/30" />
+                <span className="text-base-content font-semibold">Create New Task</span>
+            </nav>
 
             <FormProvider {...methods}>
                 <form onSubmit={methods.handleSubmit(onSubmit)}>
-                    <FormCard>
-                        <div className="flex flex-col sm:flex-row gap-4">
+                    <FormCard
+                        title="Create New Task"
+                        subtitle="Fill in the details below to create a new task."
+                        actions={<Actions submitLabel="Create Task" onCancel={() => navigate("/tasks")} />}
+                    >
+                        <div className="flex flex-col sm:flex-row gap-6">
                             <Input
                                 label="Title"
                                 name="title"
@@ -53,10 +111,16 @@ export default function CreateTask() {
                                 options={workTypeOptions}
                                 required={true}
                             />
+                            <Select
+                                label="Project"
+                                name="projectId"
+                                options={project}
+                                required={true}
+                            />
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <DateRange className="w-full"
+                        <div className="flex flex-col sm:flex-row gap-6">
+                            <DateRange
                                 title="Due Date"
                                 name="dueDate"
                             />
@@ -70,8 +134,8 @@ export default function CreateTask() {
 
                             <Select
                                 label="Assign To"
-                                name="assignTo"
-                                options={Team}
+                                name="assignToId"
+                                options={teamOptions}
                                 required={true}
                             />
                         </div>
@@ -83,7 +147,6 @@ export default function CreateTask() {
                             rows={6}
                             required={true}
                         />
-                        <Actions />
                     </FormCard>
                 </form>
             </FormProvider>
