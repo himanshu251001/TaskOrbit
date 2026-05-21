@@ -18,7 +18,7 @@ const ScheduleCard = () => {
   const fetchEvents = async () => {
     try {
       const [events, tasks] = await Promise.all([getUpcomingEvents(), getTasks({ assignedToId: user?.id, dueStartDate: new Date(), dueEndDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) })]);
-      const combinedData = [...events, ...tasks?.data];
+      const combinedData = [...events, ...tasks];
       const sortedData = combinedData.sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
       setData(sortedData);
     } catch (error) {

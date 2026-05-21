@@ -13,15 +13,18 @@ const TeamWorkload = () => {
     setTeamMembers(data);
   }
 
-  useEffect(async () => {
-    setLoading(true);
-    try {
-      await getWorkload();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        await getWorkload();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
   }, []);
 
   if (loading) {

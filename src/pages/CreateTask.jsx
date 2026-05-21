@@ -8,6 +8,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import { createTask, fetchPriorityOptions, fetchStatusOptions, fetchWorkTypeOptions } from "../services/taskService";
+import { getProjects } from "../services/projectsService";
 import { Toaster, toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { getMembers } from "../services/userService";
@@ -29,13 +30,14 @@ export default function CreateTask() {
     const [priorityOptions, setPriorityOptions] = useState([]);
     const [workTypeOptions, setWorkTypeOptions] = useState([]);
     const [teamOptions, setTeamOptions] = useState([]);
+    const [projects, setProjects] = useState([]);
 
-    // const [projects, setProjects] = useState([]);
     useEffect(() => {
         loadStatusOptions();
         loadPriorityOptions();
         loadWorkTypeOptions();
         loadTeamOptions();
+        loadProjects();
     }, []);
 
     const loadStatusOptions = async () => {
@@ -56,16 +58,16 @@ export default function CreateTask() {
         const res = await getMembers();
         setTeamOptions(res);
     };
-    // const fetchProjects = async () => {
-    //     const res = await getProjects();
-    //     setProjects(res);
-    // };
-    const project = [
-        { id: 1, name: "Project 1" },
-        { id: 2, name: "Project 2" },
-        { id: 3, name: "Project 3" },
-        { id: 4, name: "Project 4" },
-    ];
+    const loadProjects = async () => {
+        const res = await getProjects();
+        setProjects(res);
+    };
+    // const project = [
+    //     { id: 1, name: "Project 1" },
+    //     { id: 2, name: "Project 2" },
+    //     { id: 3, name: "Project 3" },
+    //     { id: 4, name: "Project 4" },
+    // ];
 
     const onSubmit = (data) => {
         createTask(data).then(() => {
@@ -114,7 +116,7 @@ export default function CreateTask() {
                             <Select
                                 label="Project"
                                 name="projectId"
-                                options={project}
+                                options={projects}
                                 required={true}
                             />
                         </div>

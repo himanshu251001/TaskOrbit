@@ -2,7 +2,7 @@ import { apiFetch } from "../utils/api";
 
 const getProjects = async () => {
   const res = await apiFetch(`/projects`);
-  if (!res || !res.ok) {
+  if (!res?.ok) {
     throw new Error("Failed to fetch projects");
   }
   const response = await res.json();
@@ -11,7 +11,7 @@ const getProjects = async () => {
 
 const getProjectById = async (id) => {
   const res = await apiFetch(`/projects/${id}`);
-  if (!res || !res.ok) {
+  if (!res?.ok) {
     throw new Error("Failed to fetch project");
   }
   const response = await res.json();
@@ -23,7 +23,7 @@ const createProject = async (project) => {
     method: "POST",
     body: JSON.stringify(project),
   });
-  if (!res || !res.ok) {
+  if (!res?.ok) {
     throw new Error("Failed to create project");
   }
   const response = await res.json();
@@ -35,7 +35,7 @@ const updateProject = async (id, project) => {
     method: "PATCH",
     body: JSON.stringify(project),
   });
-  if (!res || !res.ok) {
+  if (!res?.ok) {
     throw new Error("Failed to update project");
   }
   const response = await res.json();
@@ -46,7 +46,7 @@ const deleteProject = async (id) => {
   const res = await apiFetch(`/projects/${id}`, {
     method: "DELETE",
   });
-  if (!res || !res.ok) {
+  if (!res?.ok) {
     throw new Error("Failed to delete project");
   }
   const response = await res.json().catch(() => ({}));
@@ -55,7 +55,7 @@ const deleteProject = async (id) => {
 
 export const  fetchStatusOptions = async () => {
   const res = await apiFetch(`/projects/statusTypes`);
-  if (!res || !res.ok) {
+  if (!res?.ok) {
     throw new Error("Failed to fetch status options");
   }
   const response = await res.json();

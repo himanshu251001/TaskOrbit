@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useForm, FormProvider } from "react-hook-form";
 import { Folder, Edit3, ChevronLeft } from "lucide-react";
 import { toast } from "react-hot-toast";
 
 import {
-    getTaskById,
     updateTask,
     fetchPriorityOptions,
     fetchStatusOptions,

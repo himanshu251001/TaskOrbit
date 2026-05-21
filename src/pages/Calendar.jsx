@@ -102,7 +102,7 @@ export default function Calendar() {
         dueStartDate: new Date(year, month, 1).toISOString(),
         dueEndDate: new Date(year, month + 1, 0).toISOString(),
       });
-      const data = [...eventData, ...taskData.data];
+      const data = [...eventData, ...taskData];
       const formattedEvents = data.map(event => {
         if (!event?.event_type) {
           event.event_type = "TASK";
@@ -124,7 +124,7 @@ export default function Calendar() {
     try {
       const data = await getUpcomingEvents();
       const response = await getTasks({ assignedToId: user?.id, dueStartDate: currentDate.toISOString(), dueEndDate: new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString() });
-      const tasks = response.data.map(task => ({
+      const tasks = response.map(task => ({
         ...task,
         title: task.title,
         event_date: task.dueDate,

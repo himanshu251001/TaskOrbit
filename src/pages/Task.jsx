@@ -15,7 +15,7 @@ export default function Tasks() {
     setLoading(true);
     try {
       const response = await getTasks(filters);
-      setTasks(response?.data);
+      setTasks(response);
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
     } finally {

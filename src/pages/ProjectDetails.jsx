@@ -94,12 +94,14 @@ const ProgressCard = ({ progress }) => (
     <div className="card bg-base-100 shadow min-h-30">
         <div className="card-body">
             <h2 className="card-title">Progress</h2>
-            <progress
-                className="progress progress-primary w-full sm:w-auto"
-                value={progress}
-                max="100"
-            ></progress>
-            <p className="text-sm mt-2">{progress}% completed</p>
+            <div className="tooltip tooltip-top w-full" data-tip={`${progress || 0}%`}>
+                <progress
+                    className="progress progress-primary w-full"
+                    value={progress}
+                    max="100"
+                ></progress>
+            </div>
+
         </div>
     </div>
 );
@@ -203,7 +205,7 @@ function ProjectDetails() {
                 </div>
 
                 <div className="flex-1 flex flex-col gap-6">
-                    <ProgressCard progress={60} />
+                    <ProgressCard progress={project.progress} />
                     <DescriptionCard description={project.description} />
                     <Stack technologies={project.technologies} />
                 </div>

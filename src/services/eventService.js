@@ -3,7 +3,7 @@ import { apiFetch } from "../utils/api";
 const getAllEvents = async (month, year) => {
     const query = new URLSearchParams({ month, year }).toString();
     const res = await apiFetch(`/events?${query}`);
-    if (!res.ok) {
+    if (!res?.ok) {
         throw new Error("Failed to fetch events");
     }
     const response = await res.json();
@@ -12,7 +12,7 @@ const getAllEvents = async (month, year) => {
 
 const getUpcomingEvents = async () => {
     const res = await apiFetch("/events/upcoming");
-    if (!res.ok) {
+    if (!res?.ok) {
         throw new Error("Failed to fetch upcoming events");
     }
     const response = await res.json();
@@ -33,7 +33,7 @@ const createEvent = async (eventData) => {
         method: "POST",
         body: JSON.stringify(eventData),
     });
-    if (!res.ok) {
+    if (!res?.ok) {
         throw new Error("Failed to create event");
     }
     const response = await res.json();
@@ -45,7 +45,7 @@ const updateEvent = async (id, eventData) => {
         method: "PUT",
         body: JSON.stringify(eventData),
     });
-    if (!res.ok) {
+    if (!res?.ok) {
         throw new Error("Failed to update event");
     }
     const response = await res.json();
@@ -54,7 +54,7 @@ const updateEvent = async (id, eventData) => {
 
 const getEventsType = async () => {
     const res = await apiFetch("/events/types");
-    if (!res.ok) {
+    if (!res?.ok) {
         throw new Error("Failed to fetch events type");
     }
     const response = await res.json();
