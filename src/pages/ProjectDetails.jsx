@@ -75,13 +75,13 @@ const TeamCard = ({ team }) => (
                 {team.map((member) => (
                     <div key={member.id} className="flex items-center gap-3">
                         <div className="avatar">
-                            <div className="w-10 rounded-full">
-                                <img src={member.avatar} alt="avatar" />
+                            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black border-2 border-base-100 shadow-lg">
+                                {member.name.charAt(0).toUpperCase()}
                             </div>
                         </div>
                         <div className="min-w-0">
                             <p className="font-medium truncate">{member.name}</p>
-                            <p className="text-xs opacity-60 truncate">{member.role}</p>
+                            <p className="text-xs opacity-60 truncate">{member.designation}</p>
                         </div>
                     </div>
                 ))}

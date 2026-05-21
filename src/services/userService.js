@@ -10,7 +10,7 @@ const handleImpersonate = async (userId, currentUser) => {
             method: "POST",
             body: JSON.stringify({ targetUserId: userId }),
         });
-        if (res && res.ok) {
+        if (res?.ok) {
             const data = await res.json();
             if (data.accessToken) {
                 setAccessToken(data.accessToken);
@@ -29,7 +29,7 @@ const handleRevert = async () => {
     const res = await apiFetch("/auth/stopImpersonation", {
         method: "POST",
     });
-    if (res && res.ok) {
+    if (res?.ok) {
         const data = await res.json();
         setAccessToken(data.accessToken);
         window.location.reload();
@@ -44,7 +44,7 @@ const handleLogout = async () => {
             method: "POST",
             credentials: "include",
         });
-        if (res && res.ok) {
+        if (res?.ok) {
             clearAccessToken();
         }
     } catch {
@@ -57,24 +57,24 @@ const updateUserProfile = async (userId, data) => {
         method: "PATCH",
         body: JSON.stringify(data),
     });
-    if (!res.ok) {
+    if (!res?.ok) {
         throw new Error("Failed to update profile");
     }
     return res.json();
 }
 const getMembers = async () => {
     const res = await apiFetch("/users/members");
-    if (!res.ok) {
+    if (!res?.ok) {
         throw new Error("Failed to fetch members");
     }
     return res.json();
 };
 const getOrgMembers = async () => {
     const res = await apiFetch("/users/org-members");
-    if (!res.ok) {
+    if (!res?.ok) {
         throw new Error("Failed to fetch members");
     }
     return res.json();
-};  
+};
 
 export { handleImpersonate, handleRevert, handleLogout, getMembers, getOrgMembers, updateUserProfile };

@@ -21,7 +21,7 @@ const getUpcomingEvents = async () => {
 
 const getEventById = async (id) => {
     const res = await apiFetch(`/events/${id}`);
-    if (!res.ok) {
+    if (!res?.ok) {
         throw new Error("Failed to fetch event");
     }
     const response = await res.json();

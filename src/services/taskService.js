@@ -37,7 +37,7 @@ const updateTask = async (id, task) => {
         body: JSON.stringify(task),
     });
     if (!res?.ok) {
-        throw new Error("Failed to create task");
+        throw new Error("Failed to Update task");
     }
     const response = await res.json();
     return response?.data || response;
@@ -48,7 +48,7 @@ const deleteTask = async (id) => {
         method: "DELETE",
     });
     if (!res?.ok) {
-        throw new Error("Failed to create task");
+        throw new Error("Failed to Delete task");
     }
     const response = await res.json();
     return response?.data || response;

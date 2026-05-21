@@ -62,12 +62,6 @@ export default function CreateTask() {
         const res = await getProjects();
         setProjects(res);
     };
-    // const project = [
-    //     { id: 1, name: "Project 1" },
-    //     { id: 2, name: "Project 2" },
-    //     { id: 3, name: "Project 3" },
-    //     { id: 4, name: "Project 4" },
-    // ];
 
     const onSubmit = (data) => {
         createTask(data).then(() => {

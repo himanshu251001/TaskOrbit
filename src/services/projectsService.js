@@ -53,7 +53,7 @@ const deleteProject = async (id) => {
   return response?.data || response;
 };
 
-export const  fetchStatusOptions = async () => {
+const fetchStatusOptions = async () => {
   const res = await apiFetch(`/projects/statusTypes`);
   if (!res?.ok) {
     throw new Error("Failed to fetch status options");
@@ -62,4 +62,13 @@ export const  fetchStatusOptions = async () => {
   return response?.data || response;
 };
 
-export { getProjects, getProjectById, createProject, updateProject, deleteProject };
+const fetchProjectMember = async (id) => {
+  const res = await apiFetch(`/projects/${id}/members`);
+  if (!res?.ok) {
+    throw new Error("Failed to fetch project members");
+  }
+  const response = await res.json();
+  return response?.data || response;
+}
+
+export { getProjects, getProjectById, createProject, updateProject, deleteProject, fetchProjectMember, fetchStatusOptions };

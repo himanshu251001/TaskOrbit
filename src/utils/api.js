@@ -10,7 +10,11 @@ export async function apiFetch(path, options = {}) {
 
     if (!token) {
         redirectToLogin();
-        return;
+        return new Response(JSON.stringify({ error: "Authentication token missing" }), {
+            status: 401,
+            statusText: "Unauthorized",
+            headers: { "Content-Type": "application/json" }
+        });
     }
 
     try {

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
-import { getProjects } from "../services/projectsService";
+import { getProjects,fetchProjectMember } from "../services/projectsService";
 
 export default function Projects() {
   const navigate = useNavigate();
@@ -13,6 +13,9 @@ export default function Projects() {
       setLoading(true);
       try {
         const data = await getProjects();
+        data.map(async project => {
+          project.team =await fetchProjectMember(project.id);
+        })
         setProjects(data);
       } catch (err) {
         console.error("Error fetching projects:", err);

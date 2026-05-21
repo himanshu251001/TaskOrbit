@@ -73,7 +73,7 @@ export default function CreateProject() {
                     ? project.dueDate.slice(0, 10)
                     : "",
             estimatedHours: project.EstimatedHours ?? "",
-            budget: project.Budget ?? project.Budget ?? 12500,
+            budget: project.Budget ?? "",
             users: project.ProjectMember?.map((m) => m.userId) ?? [],
             description: project.description ?? "",
             status: project.status,

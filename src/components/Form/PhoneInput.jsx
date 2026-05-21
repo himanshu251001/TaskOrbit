@@ -63,7 +63,7 @@ const PhoneInputField = ({
         <span className="text-error text-xs mt-0.5">{errors[name].message}</span>
       )}
 
-      <style jsx global>{`
+      <style>{`
         .PhoneInputCountry {
           display: flex;
           align-items: center;
