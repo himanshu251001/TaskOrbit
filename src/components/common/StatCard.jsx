@@ -2,21 +2,13 @@
 
 import React from "react";
 
-const StatCard = ({ title, value, change, positive }) => {
+const StatCard = ({ title, value }) => {
   return (
-    <div className="flex flex-col flex-wrap gap-2">
+    <div className="flex flex-col flex-wrap gap-2 items-center md:items-start">
       <span className="text-sm text-base-content/60">{title}</span>
 
-      <div className="flex items-center gap-3">
+      <div className="px-4 flex items-center gap-3">
         <span className="text-2xl font-semibold">{value}</span>
-
-        <span
-          className={`badge badge-sm ${
-            positive ? "badge-success" : "badge-error"
-          }`}
-        >
-          {change}
-        </span>
       </div>
     </div>
   );

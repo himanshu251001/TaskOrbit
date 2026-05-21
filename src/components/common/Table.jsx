@@ -1,104 +1,133 @@
-import React from "react";
-import {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    Funnel
-} from "lucide-react";
+import React, { useEffect, useState } from "react";
+import Pagination from "./Pagination";
+import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import ColumnSelectorSidebar from "./ColumnSelectorSidebar";
 
-const Table = ({ data = [] }) => {
+const Table = ({ data = [], linkColumn = 'id', onFilterClick, onRowClick }) => {
+    const navigate = useNavigate();
+    const [allColumns, setAllColumns] = useState([]);
+    const [visibleColumns, setVisibleColumns] = useState([]);
+    const [isSelectorOpen, setIsSelectorOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+
+    useEffect(() => {
+        if (data && data.length) {
+            const keys = Object.keys(data[0]);
+            setAllColumns(keys);
+            // By default, all columns are selected if not already set
+            if (visibleColumns.length === 0) {
+                setVisibleColumns(keys);
+            }
+        } else {
+            setAllColumns([]);
+        }
+        setCurrentPage(1);
+    }, [data]);
+
+    const totalPages = Math.max(1, Math.ceil(data.length / pageSize));
+    const paginatedData = Array.isArray(data) ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize) : [];
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
+    const handlePageSizeChange = (size) => {
+        setPageSize(size);
+        setCurrentPage(1);
+    };
+
     return (
-
         <>
-            <div className="w-full min-h-dvh sm:min-h-0">
-                <div className="flex flex-row flex-wrap justify-end lg:items-center  gap-4 mb-4" >
-                    <div className="flex items-center gap-2 justify-end" >
-                        <button className="btn btn-outline btn-sm gap-2">
-                            <Funnel className="w-4 h-4" />
+            <div className="p-2 sm:p-4 bg-base-100 flex-1 flex flex-col rounded-lg min-h-[450px]">
+                <div className="flex flex-col sm:flex-row justify-end gap-2 p-2 mb-4 bg-base-200 rounded-md">
+                    <div className="flex gap-2 items-center justify-end">
+                        <button 
+                            className="shadow-sm hover:shadow-md px-3 py-2 rounded text-sm bg-base-100 whitespace-nowrap"
+                            onClick={() => setIsSelectorOpen(true)}
+                        >
+                            Customize Columns
+                        </button>
+                        <button 
+                            className="shadow-sm hover:shadow-md px-3 py-2 rounded text-sm bg-base-100"
+                            onClick={onFilterClick}
+                        >
                             Filter
                         </button>
-
-                    </div >
-                </div >
-
-                <div className="bg-base-100 p-4 rounded-xl flex flex-col flex-wrap shadow-sm ">
-
-                    <div className="border w-full rounded-lg overflow-x-auto ">
-                        <table className="table w-full min-w-max ">
-                            <thead className="bg-base-200 text-base-content uppercase text-xs ">
+                        <button
+                            className="btn btn-sm btn-primary px-3 py-2 rounded text-sm hidden md:flex"
+                            onClick={() => navigate("/tasks/create")}
+                        >
+                            <Plus className="mr-1" size={18} /> Create Task
+                        </button>
+                    </div>
+                </div>
+                <div className="overflow-x-auto flex-1">
+                    {!data || data.length === 0 ? (
+                        <div className="p-8 text-center text-base-content/50">No record found</div>
+                    ) : (
+                        <table className="table w-full text-sm border-collapse rounded-lg min-w-[700px]">
+                            <thead className="bg-[#eef3ff] text-gray-600">
                                 <tr>
-                                    <th>Employee ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Job Title</th>
-                                    <th>Department</th>
-                                    <th>Location</th>
-                                    <th>Date of Joining</th>
+                                    {visibleColumns.map((col, idx) => (
+                                        <th
+                                            key={col}
+                                            className={`text-left p-3 min-w-[250px] ${idx === 0 ? "rounded-tl-lg" : ""} ${idx === visibleColumns.length - 1 ? "rounded-tr-lg" : ""}`}
+                                        >
+                                            {col.replace(/_/g, " ").toUpperCase()}
+                                        </th>
+                                    ))}
                                 </tr>
                             </thead>
-
                             <tbody>
-                                {data.map((emp) => (
-                                    <tr
-                                        key={emp.id}
-                                        className="border-b hover:bg-base-200 "
-                                    >
-                                        <td>{emp.id}</td>
-                                        <td>
-                                            <div className="flex items-center gap-3">
-
-                                                <span className="text-primary font-medium hover:underline">
-                                                    {emp.name}
-                                                </span>
-                                            </div>
-                                        </td>
-
-                                        <td className="truncate">{emp.email}</td>
-                                        <td>{emp.jobTitle}</td>
-                                        <td>{emp.department}</td>
-                                        <td>{emp.location}</td>
-                                        <td>{emp.joiningDate}</td>
+                                {paginatedData.map((row, i) => (
+                                    <tr key={row.id || i} className="border-b border-base-200 hover:bg-base-200">
+                                        {visibleColumns.map((col) => {
+                                            let value = row[col];
+                                            if (typeof value === "object" && value !== null) {
+                                                value = JSON.stringify(value);
+                                            }
+                                            if (col === linkColumn) {
+                                                return (
+                                                    <td
+                                                        key={col}
+                                                        className="p-3 text-left truncate max-w-[400px] underline text-primary hover:underline cursor-pointer font-semibold"
+                                                        onClick={() => onRowClick && onRowClick(row)}
+                                                    >
+                                                        {value}
+                                                    </td>
+                                                );
+                                            }
+                                            return (
+                                                <td key={col} className="p-3 text-left truncate max-w-[400px] ">{value}</td>
+                                            );
+                                        })}
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                    </div>
-
-                    <div className="flex flex-col lg:flex-row items-center justify-between mt-4 gap-4 w-full sm:gap-0">
-
-                        {/* Page Numbers */}
-                        <div className="flex items-center gap-2 text-sm w-full lg:w-auto justify-center sm:gap-1">
-
-                            <button className="btn btn-ghost btn-sm gap-1">
-                                <ChevronLeftIcon className="w-4 h-4" />
-                                Prev
-                            </button>
-
-                            <button className="btn btn-primary btn-sm">1</button>
-                            <button className="btn btn-ghost btn-sm">2</button>
-                            <button className="btn btn-ghost btn-sm">3</button>
-
-
-                            <button className="btn btn-ghost btn-sm gap-1">
-                                Next
-                                <ChevronRightIcon className="w-4 h-4" />
-                            </button>
-                        </div>
-
-                        {/* Page Size */}
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm">Page Size</span>
-                            <select className="select select-bordered select-sm">
-                                <option>10</option>
-                                <option>20</option>
-                                <option>50</option>
-                            </select>
-                        </div>
-                    </div>
+                    )}
                 </div>
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    pageSize={pageSize}
+                    onPageChange={handlePageChange}
+                    onPageSizeChange={handlePageSizeChange}
+                />
             </div>
+
+            <ColumnSelectorSidebar 
+                isOpen={isSelectorOpen}
+                onClose={() => setIsSelectorOpen(false)}
+                columns={allColumns}
+                visibleColumns={visibleColumns}
+                onApply={setVisibleColumns}
+            />
         </>
     );
 };
-
 
 export default Table;
