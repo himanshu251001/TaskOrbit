@@ -1,6 +1,7 @@
 import { apiFetch, BASE_URL } from "../utils/api";
 import { setAccessToken, clearAccessToken } from "./auth";
 import { toast } from "react-hot-toast";
+
 const handleImpersonate = async (userId, currentUser) => {
     if (userId === currentUser?.id) {
         alert("You cannot impersonate yourself.");
@@ -82,35 +83,34 @@ const loginWithMicrosoft = async () => {
         method: "GET",
         credentials: "include",
     });
-    if (res?.ok) {
-        const data = await res.json();
-        if (data?.url) {
-            window.location.href = data.url;
-            return;
-        }
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+        throw new Error(data?.message || "Failed to login with Microsoft");
     }
-    else {
-        throw new Error("Failed to login with Microsoft");
+    if (!data?.url) {
+        throw new Error("Microsoft login URL missing from response");
     }
-    return res.json();
+    window.location.href = data.url;
+    return data;
 };
-const signUpWithMicrosoft = async () => {
+const signUpWithMicrosoft = async (navigate) => {
     const res = await fetch(`${BASE_URL}/auth/microsoft/signup`, {
         method: "GET",
         credentials: "include",
     });
+    const data = await res.json();
     if (res?.ok) {
-        const data = await res.json();
         if (data?.url) {
             window.location.href = data.url;
+        } else {
+            navigate("/login");
         }
-        navigate("/login");
     }
     else {
 
         toast.error("Failed to signup with Microsoft");
     }
-    return res.json();
+    return data;
 };
 
 const registerUser = async (formData) => {

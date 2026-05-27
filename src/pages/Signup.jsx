@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm, FormProvider } from "react-hook-form";
 import { registerUser, signUpWithMicrosoft } from "../services/userService";
 import { toast } from "react-hot-toast";
@@ -10,7 +10,6 @@ import Alert from "../components/common/Alert";
 
 function Signup() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const [showOrgAlert, setShowOrgAlert] = useState(false);
 
   const methods = useForm({
@@ -21,21 +20,20 @@ function Signup() {
     }
   });
 
-  const { handleSubmit, reset } = methods;
+  const { handleSubmit } = methods;
 
   const onSubmit = async (formData) => {
     try {
       const res = await registerUser(formData);
-      const response = await res?.json();
+      const data = await res?.json();
 
       if (res?.ok) {
-        toast.success(response?.message);
+        toast.success(data?.message);
         navigate("/login");
 
       } else {
-        const errMsg = response?.message || "Failed to create account";
+        const errMsg = data?.message || "Failed to create account";
         if (errMsg.includes("No organization found with this email domain")) {
-          const domain = formData.email.split("@")[1];
           setShowOrgAlert(true);
         }
         else {
@@ -49,7 +47,7 @@ function Signup() {
 
   const handleMicrosoftSignup = async () => {
     try {
-      await signUpWithMicrosoft();
+      await signUpWithMicrosoft(navigate);
     } catch (err) {
       toast.error(err?.message || "Failed to signup with Microsoft");
     }
