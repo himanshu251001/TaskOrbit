@@ -154,7 +154,7 @@ export default function Profile() {
             <FormProvider {...methods}>
               <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-wrap -mx-4">
                 <div className="w-full md:w-1/2 px-4 mb-6">
-                  <Input label="Full Name" name="fullName" placeholder={isEditing ? "Your Name" : "-"} disabled={!isEditing} />
+                  <Input label="Full Name" name="fullName" placeholder="Your Name" disabled={true} />
                 </div>
                 <div className="w-full md:w-1/2 px-4 mb-6">
                   <PhoneInput label="Phone Number" name="phoneNumber" placeholder={isEditing ? "+1 (000) 000-0000" : "-"} disabled={!isEditing} />

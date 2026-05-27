@@ -132,7 +132,6 @@ export default function CreateTask() {
                                 label="Assign To"
                                 name="assignToId"
                                 options={teamOptions}
-                                required={true}
                             />
                         </div>
 

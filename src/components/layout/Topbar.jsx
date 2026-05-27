@@ -7,7 +7,7 @@ import { useUser } from "../../context/UserContext";
 import { useState } from "react";
 import { handleImpersonate, handleRevert } from "../../services/userService";
 
-const Topbar = ({ theme, setTheme, location }) => {
+const Topbar = ({ theme, setTheme, location, onMenuClick }) => {
   const { user, loading } = useUser();
   const [selectedUser, setSelectedUser] = useState(null);
   const getPageTitle = (path) => {
@@ -31,7 +31,7 @@ const Topbar = ({ theme, setTheme, location }) => {
       </div>
       <div className="w-full flex justify-between items-center">
         <div className="flex items-center gap-2 sm:gap-4">
-          <button className="btn btn-ghost btn-square lg:hidden md:hidden">
+          <button onClick={onMenuClick} className="btn btn-ghost btn-square  md:hidden">
             <Menu size={20} />
           </button>
         </div>
