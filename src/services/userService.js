@@ -1,5 +1,7 @@
-import { apiFetch } from "../utils/api";
+import { apiFetch, BASE_URL } from "../utils/api";
 import { setAccessToken, clearAccessToken } from "./auth";
+import { toast } from "react-hot-toast";
+
 const handleImpersonate = async (userId, currentUser) => {
     if (userId === currentUser?.id) {
         alert("You cannot impersonate yourself.");
@@ -76,5 +78,56 @@ const getOrgMembers = async () => {
     }
     return res.json();
 };
+const loginWithMicrosoft = async () => {
+    const res = await fetch(`${BASE_URL}/auth/microsoft/login`, {
+        method: "GET",
+        credentials: "include",
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+        throw new Error(data?.message || "Failed to login with Microsoft");
+    }
+    if (!data?.url) {
+        throw new Error("Microsoft login URL missing from response");
+    }
+    window.location.href = data.url;
+    return data;
+};
+const signUpWithMicrosoft = async (navigate) => {
+    const res = await fetch(`${BASE_URL}/auth/microsoft/signup`, {
+        method: "GET",
+        credentials: "include",
+    });
+    const data = await res.json();
+    if (res?.ok) {
+        if (data?.url) {
+            window.location.href = data.url;
+        } else {
+            navigate("/login");
+        }
+    }
+    else {
 
-export { handleImpersonate, handleRevert, handleLogout, getMembers, getOrgMembers, updateUserProfile };
+        toast.error("Failed to signup with Microsoft");
+    }
+    return data;
+};
+
+const registerUser = async (formData) => {
+    return fetch(`${BASE_URL}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+        credentials: "include",
+    });
+};
+const registerOrg = async (formData) => {
+    return fetch(`${BASE_URL}/auth/organization/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+        credentials: "include",
+    })
+}
+
+export { handleImpersonate, handleRevert, handleLogout, getMembers, getOrgMembers, updateUserProfile, loginWithMicrosoft, registerUser, signUpWithMicrosoft, registerOrg };

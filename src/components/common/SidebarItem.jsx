@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom";
 
-const SidebarItem = ({ icon: Icon, label, to }) => {
+const SidebarItem = ({ icon: Icon, label, to, ...rest }) => {
   return (
     <li>
       <NavLink
         to={to}
+        {...rest}
         className={({ isActive }) =>
           `flex gap-3 rounded-md px-8 py-3 text-sm font-medium transition-all ${
             isActive
